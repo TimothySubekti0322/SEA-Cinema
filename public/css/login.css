@@ -1,0 +1,85 @@
+.main-background {
+  background-image: url("../images/login-bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.text-head {
+  font-family: "Open Sans", sans-serif;
+}
+
+#HELLO {
+  font-weight: normal;
+  color: #31d7a9;
+}
+
+#WELCOME-BACK {
+  color: #ffffff;
+}
+
+.dark-blue-bg {
+  background-color: #031637;
+}
+
+.main-section {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.white-text {
+  color: white;
+}
+
+.login-btn {
+  background-image: -webkit-linear-gradient(
+    169deg,
+    #5560ff 17%,
+    #aa52a1 63%,
+    #ff4343 100%
+  );
+  text-transform: uppercase;
+  font-weight: bold;
+  color: white;
+  /* transition: all ease 0.3s;
+  border-radius: 30px;
+  width: auto;
+  padding: 0 50px;
+  height: 50px;
+  text-transform: uppercase;
+  margin: 0 auto; */
+}
+
+.btn-div {
+  align-items: center;
+  text-align: center;
+}
+
+.option {
+  text-align: center;
+  color: #dbe2fb;
+}
+
+.option > a {
+  color: #31d7a9;
+}
+
+.input-name {
+  color: #e5e3e5;
+  margin-bottom: 4px;
+  font-size: medium;
+}
+
+.form-control {
+  background-color: #e5e3e5;
+}

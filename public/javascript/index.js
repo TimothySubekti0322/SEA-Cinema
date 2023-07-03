@@ -1,13 +1,13 @@
 fetch("https://seleksi-sea-2023.vercel.app/api/movies")
-  .then((response) => response.json())
-  .then((data) => {
-    const movieListContainer = document.getElementById("movie-list");
+    .then((response) => response.json())
+    .then((data) => {
+        const movieListContainer = document.getElementById("movie-list");
 
-    // Loop through each movie and create a movie item using the template
-    data.forEach((movie) => {
-      const movieItem = document.createElement("div");
-      movieItem, (className = "col");
-      movieItem.innerHTML = `                <div class="card shadow-sm">
+        // Loop through each movie and create a movie item using the template
+        data.forEach((movie) => {
+            const movieItem = document.createElement("div");
+            movieItem, (className = "col");
+            movieItem.innerHTML = `                <div class="card shadow-sm">
                     <img src="${movie.poster_url}"
                         alt="${movie.title} poster">
                     <title>${movie.title}</title>
@@ -16,7 +16,7 @@ fetch("https://seleksi-sea-2023.vercel.app/api/movies")
                         <hr style="border: 1px solid #fff;" />
                         <div class="d-flex justify-content-between align-items-center bottom-section">
                             <div class="btn-group gap-3" style="padding: 10px 0px display">
-                                <button type="submit" name="details" value = ${movie.id} class="btn btn-primary btn-sm"
+                                <button type="submit" name="details" value = "${movie.title}" class="btn btn-primary btn-sm"
                                     style="border: 0px; border-radius: 4px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                         class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -43,9 +43,9 @@ fetch("https://seleksi-sea-2023.vercel.app/api/movies")
                         </div>
                     </div>
                 </div>`;
-      movieListContainer.appendChild(movieItem);
+            movieListContainer.appendChild(movieItem);
+        });
+    })
+    .catch((error) => {
+        console.log("An error occurred:", error);
     });
-  })
-  .catch((error) => {
-    console.log("An error occurred:", error);
-  });

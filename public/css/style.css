@@ -43,7 +43,12 @@ span#movies-word {
 }
 
 .main-movies {
-  background-color: #001232;
+  background: rgb(8, 19, 76);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 19, 76, 1) 0%,
+    rgba(0, 18, 50, 1) 10%
+  );
 }
 
 .bottom-section svg {
@@ -90,6 +95,43 @@ span#movies-word {
 .main-movies hr {
   border-top: 3px solid white;
   width: 100%;
+}
+
+.signup {
+  background-image: -webkit-linear-gradient(
+    169deg,
+    #5560ff 17%,
+    #aa52a1 63%,
+    #ff4343 100%
+  );
+  border-radius: 105px !important;
+  color: #f0f0f0 !important;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.signup:hover {
+  color: #212529 !important;
+}
+
+.footer {
+  background-color: #0a1e5e;
+  color: white;
+}
+
+.invisible-button {
+  /* Hide the text */
+  color: transparent;
+  text-indent: -9999px;
+  overflow: hidden;
+  /* Customize the button appearance */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 /* .banner-section {

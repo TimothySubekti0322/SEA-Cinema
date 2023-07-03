@@ -1,0 +1,23 @@
+div.body-section {
+  background-color: #001232;
+}
+
+div.body-section h2 {
+  color: white;
+}
+
+div.body-section p,
+.col {
+  color: #bdcaf3;
+}
+
+.book {
+  background-image: -webkit-linear-gradient(
+    169deg,
+    #5560ff 17%,
+    #aa52a1 63%,
+    #ff4343 100%
+  );
+  border-radius: 105px;
+  color: #dbdfea;
+}
