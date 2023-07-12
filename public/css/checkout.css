@@ -1,0 +1,211 @@
+.jumbotron-img {
+  background-image: url("../images/bannerCheckout.jpg");
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  min-height: 200px;
+}
+
+.img-gradient {
+  background: rgb(10, 30, 94, 0.8);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 30, 94, 0.8) 0%,
+    rgba(0, 18, 50, 0.8) 100%
+  );
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.jumbotron-text {
+  color: #ffff;
+}
+
+.outer-container {
+  /* background: rgb(6, 17, 62);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 17, 62, 1) 0%,
+    rgba(10, 30, 94, 1) 100%
+  ); */
+  background: rgb(6, 17, 62);
+  background: linear-gradient(
+    180deg,
+    rgba(6, 17, 62, 1) 0%,
+    rgba(0, 18, 50, 1) 100%
+  );
+  /* background-color: #001232; */
+  padding-top: 80px;
+}
+
+.details-heading {
+  width: 90%;
+  margin-left: 5%;
+}
+
+.heading {
+  padding: 40px 0px;
+  color: #31d7a9;
+  margin: 0px;
+  text-align: center;
+  border-top: 2px solid #213a69;
+  border-bottom: 2px solid #213a69;
+}
+
+.movie-image {
+  max-height: 360px;
+  align-items: center;
+}
+
+#movie-title {
+  color: #f5f5f5;
+}
+
+.description-text {
+  color: #f5f5f5;
+  margin-left: 10px;
+}
+
+.price-details-box {
+  width: 80%;
+  margin-left: 10%;
+}
+
+.inner-price-details {
+  padding: 15px 0px;
+  border-bottom: 3px solid #f5f5f5;
+}
+
+.inner-price-details,
+.total-section,
+.balance-section * {
+  color: #f5f5f5;
+}
+
+.price-details-h2 {
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+.blank {
+  width: 100%;
+  height: 250px;
+}
+
+.btn-pay {
+  border: 0px;
+  border-radius: 100px;
+  background-image: -webkit-linear-gradient(
+    169deg,
+    #5560ff 17%,
+    #aa52a1 63%,
+    #ff4343 100%
+  );
+  padding: 14px 30px;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.btn-pay:hover {
+  color: black;
+}
+
+.blank2 {
+  width: 100%;
+  height: 75px;
+}
+
+/* The Modal (background) */
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modalContent {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+
+/* The Close Button */
+.close1 {
+  color: #aaaaaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.errorHeading {
+  color: #a32a30;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-left: 15px;
+  padding-bottom: 4px;
+}
+
+.errorModalsHeadingsection {
+  height: 35px;
+}
+
+.customHR {
+  border: 2px solid #526d82;
+}
+
+.errorHeadingBelow {
+  font-size: 24px;
+  font-weight: 500;
+  color: #595959;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.topUpButton {
+  background-color: #020b22;
+  border: 0px;
+  border-radius: 4px;
+  background-color: #3eb2fd;
+  background-image: linear-gradient(1deg, #4f58fd, #149bf3 99%);
+  color: #f5f5f5;
+  box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+    rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+  padding: 10px 20px;
+}
+
+.topUpNowButton {
+  background-color: #f27151;
+  border: 0px;
+  border-radius: 4px;
+  background-color: #3eb2fd;
+  background-image: linear-gradient(1deg, #4f58fd, #149bf3 99%);
+  color: #f5f5f5;
+  box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+    rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+  padding: 10px 20px;
+}
+
+.topUpButton,
+.topUpNowButton :hover {
+  color: black;
+}

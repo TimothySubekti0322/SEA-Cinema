@@ -119,19 +119,22 @@ span#movies-word {
   color: white;
 }
 
-.invisible-button {
-  /* Hide the text */
-  color: transparent;
-  text-indent: -9999px;
-  overflow: hidden;
-  /* Customize the button appearance */
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
+@media (min-width: 991px) {
+  .h3-box {
+    min-height: 119px;
+  }
+}
+
+@media (max-width: 991px) {
+  .h3-box {
+    min-height: 149px;
+  }
+}
+
+.h3-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* .banner-section {

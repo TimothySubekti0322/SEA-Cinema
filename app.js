@@ -3,6 +3,8 @@ const express = require("express");
 const fetch = require('node-fetch');
 const app = express();
 const port = 3000;
+const md5 = require('md5');
+require('dotenv').config()
 
 // Static files
 app.use(express.static("public"));
@@ -13,9 +15,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const mongoose = require("mongoose");
+const { render } = require("ejs");
+
+
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/sea_movie", {
+mongoose.connect(process.env.MONGO_LOCAL_URL, {
   useNewUrlParser: true,
 });
 
@@ -27,8 +32,30 @@ const userSchema = new mongoose.Schema({
   balance: Number
 });
 
+const bookingHistorySchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  movie_title: String,
+  date: String,
+  location: String,
+  showtime: String,
+  quantity: Number,
+  seat: [String],
+  total: Number
+});
+
+const cinemaSchema = new mongoose.Schema({
+  movie_title: String,
+  date: String,
+  location: String,
+  showtime: String,
+  seatUsed: [String]
+});
+
 // Create a model
 const User = new mongoose.model("User", userSchema);
+const Cinema = new mongoose.model("Cinema", cinemaSchema);
+const BookingHistory = new mongoose.model("BookingHistory", bookingHistorySchema);
 
 // ejs
 app.set("view engine", "ejs");
@@ -37,8 +64,10 @@ app.set("view engine", "ejs");
 const apiURL = "https://seleksi-sea-2023.vercel.app/api/movies";
 var logedIn = false;
 var username = "";
+var email = "";
+var balance = 0;
 var buttonOrProfile = `<div class="col-md-2 text-end py-sm-3 py-lg-0">
-                            <a href="./signup.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
+                            <a href="./login.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
                         </div>`;
 
 var secondHiddenLi = "";
@@ -50,11 +79,52 @@ var release_date = "";
 var ticket_price = "";
 var description = "";
 
+var date = "";
+var location = "";
+var showtime = "";
+var total = 0;
+var ticketSelected = 0;
+var seatSelected = [];
+var totalWithTax = 0;
+
+var dateEmpty = "";
+var locationEmpty = "";
+
+var A1 = "";
+var A2 = "";
+var A3 = "";
+var B1 = "";
+var B2 = "";
+var B3 = "";
+var C1 = "";
+var C2 = "";
+var C3 = "";
+
+var A1type = "submit";
+var A2type = "submit";
+var A3type = "submit";
+var B1type = "submit";
+var B2type = "submit";
+var B3type = "submit";
+var C1type = "submit";
+var C2type = "submit";
+var C3type = "submit";
+
+var modalsError = "display: none;";
+var modalsTopUp = "display: none;";
 
 // Home Page
 app.get("/", function (req, res) {
   // res.sendFile(__dirname + "/index.html");
   let buttonOrProfile = "";
+  total = 0;
+  ticketSelected = 0;
+  seatSelected = [];
+  dateEmpty = "";
+  locationEmpty = "";
+  A1 = ""; A2 = ""; A3 = ""; B1 = ""; B2 = ""; B3 = ""; C1 = ""; C2 = ""; C3 = "";
+  totalWithTax = 0;
+
   if (logedIn) {
     buttonOrProfile = `<div class="dropdown text-end">
                             <a href="#" class="d-block text-decoration-none dropdown-toggle" id="dropdownUser1"
@@ -76,11 +146,11 @@ app.get("/", function (req, res) {
                                 <li><a class="dropdown-item" href="./login.ejs">Sign out</a></li>
                             </ul>
                         </div>`
-    res.render("index", { secondHiddenLi: "", buttonOrProfile: buttonOrProfile });
+    res.render("index", { secondHiddenLi: secondHiddenLi, buttonOrProfile: buttonOrProfile });
   }
   else {
     buttonOrProfile = `<div class="col-md-2 text-end py-sm-3 py-lg-0">
-                            <a href="./signup.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
+                            <a href="./login.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
                         </div>`
     res.render("index", { secondHiddenLi: "", buttonOrProfile: buttonOrProfile })
   }
@@ -89,26 +159,55 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   var count = 0;
   var buttonValue = req.body.details;
-  console.log(`Button Value: ${buttonValue}`);
-  fetch("https://seleksi-sea-2023.vercel.app/api/movies")
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((movie) => {
-        // console.log(`${count++} : ${movie.title} : ${buttonValue}`);
-        if (movie.title == buttonValue) {
+  if (buttonValue.slice(0, 9) === "buyTicket") {
+    if (!logedIn) {
+      res.redirect("/login.ejs");
+    }
+    else {
+      fetch(apiURL)
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((movie) => {
+            // console.log(`${count++} : ${movie.title} : ${buttonValue}`);
+            if (movie.title == buttonValue.slice(10,)) {
+              poster_url = movie.poster_url;
+              title = movie.title;
+              age_rating = movie.age_rating;
+              release_date = movie.release_date;
+              release_date = release_date.slice(0, 4);
+              ticket_price = movie.ticket_price;
+              description = movie.description;
+            }
+          })
 
-          poster_url = movie.poster_url;
-          title = movie.title;
-          age_rating = movie.age_rating;
-          release_date = movie.release_date;
-          release_date = release_date.slice(0, 4);
-          ticket_price = movie.ticket_price;
-          description = movie.description;
+          res.redirect("/buyTicket.ejs");
+        }).catch((err) => console.log(`An error occurred: ${err}`));
+    }
+  }
 
-        }
-      })
-      res.redirect("/details.ejs");
-    }).catch((err) => console.log(`An error occurred: ${err}`));
+  else {
+    fetch(apiURL)
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach((movie) => {
+          // console.log(`${count++} : ${movie.title} : ${buttonValue}`);
+          if (movie.title == buttonValue.slice(8,)) {
+
+            poster_url = movie.poster_url;
+            title = movie.title;
+            age_rating = movie.age_rating;
+            release_date = movie.release_date;
+            release_date = release_date.slice(0, 4);
+            ticket_price = movie.ticket_price;
+            description = movie.description;
+          }
+        })
+        res.redirect("/details.ejs");
+      }).catch((err) => console.log(`An error occurred: ${err}`));
+
+  }
+
+
 
 
   // res.render("details", { secondHiddenLi: secondHiddenLi, buttonOrProfile: buttonOrProfile, poster_url: poster_url, title: title, age_rating: age_rating, release_date: release_date, ticket_price: ticket_price, description: description });
@@ -120,33 +219,35 @@ app.post("/", function (req, res) {
 app.get("/login.ejs", function (req, res) {
   logedIn = false;
   username = "";
+  email = "";
+  balance = "";
   buttonOrProfile = `<div class="col-md-2 text-end py-sm-3 py-lg-0">
-                            <a href="./signup.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
+                            <a href="./login.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
                         </div>`;
 
   secondHiddenLi = "";
 
-  poster_url = "";
-  title = "";
-  age_rating = "";
-  release_date = "";
-  ticket_price = "";
-  description = "";
+  // poster_url = "";
+  // title = "";
+  // age_rating = "";
+  // release_date = "";
+  // ticket_price = "";
+  // description = "";
   res.render("login", { incorrectCredential: "" });
 });
 
 app.post("/login", function (req, res) {
-  const email = req.body.email;
-  const password = req.body.password;
+  email = req.body.email;
+  const password = md5(req.body.password);
   User.findOne({ email: email }).then(function (userFound) {
     if (userFound) {
       if (userFound.password === password) {
 
         secondHiddenLi = "";
-
+        balance = userFound.balance;
         // Tidy Up the Header
         let usernamaLength = userFound.username.length;
-        console.log(usernamaLength);
+        // console.log(usernamaLength);
         let userName = userFound.username;
         if (usernamaLength > 15) {
           userName = userName.slice(0, 13) + "..";
@@ -181,7 +282,7 @@ app.post("/login", function (req, res) {
         logedIn = true;
       }
       else {
-        res.render("login", { incorrectCredential: "incorrect username or password" });
+        res.render("login", { incorrectCredential: "incorrect password" });
       }
     }
     else {
@@ -201,14 +302,14 @@ app.get("/signup.ejs", function (req, res) {
 app.post("/signup", function (req, res) {
   User.findOne({ email: req.body.email })
     .then(function (userFound) {
-      console.log(userFound);
+      // console.log(userFound);
       if (userFound) {
         res.render("signup", { emailWarn: "Email has been registered" });
       } else {
         const newUser = new User({
           username: req.body.username,
           email: req.body.email,
-          password: req.body.password,
+          password: md5(req.body.password),
           balance: 0
         });
 
@@ -232,12 +333,12 @@ app.post("/signup", function (req, res) {
 
 // Details page
 app.get("/details.ejs", function (req, res) {
-  let movieDetails = `    <div class="body-section">
+  let movieDetails = `    <form action="/details.ejs" method="POST"><div class="body-section">
         <div class="container col-xxl-8 px-4 py-4">
             <div class="row flex-lg-row align-items-start py-5">
                 <div class="col-10 col-sm-8 col-lg-4 mb-md-3" style="text-align: start;">
                     <img src="`+ poster_url + `"
-                        class="d-block mr-lg-auto img-fluid" alt="Bootstrap Themes" width="250" height="50"
+                        class="d-block mr-lg-auto img-fluid" alt="Bootstrap Themes" width="250" height="75"
                         loading="lazy">
                 </div>
                 <div class="col-lg-8">
@@ -275,16 +376,501 @@ app.get("/details.ejs", function (req, res) {
                     </div>
                     <p class="lead mb-5">`+ description + `</p>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button type="button" class="btn book btn-lg px-4 me-md-2">Book Ticket</button>
-
+                        <button type="submit" name="buyTicket" value="buyTicket" class="btn book btn-lg px-4 me-md-2">Book Ticket</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>`
+    </div></form>`
   res.render("details", { secondHiddenLi: secondHiddenLi, buttonOrProfile: buttonOrProfile, movieDetails: movieDetails });
+});
+
+app.post("/details.ejs", function (req, res) {
+
+  if (!logedIn) {
+    res.redirect("/login.ejs");
+  }
+  else {
+    res.redirect("/buyTicket.ejs");
+  }
+
+});
+
+// Buy Ticket
+app.get("/buyTicket.ejs", function (req, res) {
+  let movieDetails = `          <img src="` + poster_url + `"
+                                    class="movie-image" />
+
+                                <h4 class="movie-title">`+ title + `</h4>
+                                <br class="br40" />
+                                <img src="images/person-fill.svg" class="svg" />
+                                <text style="margin-left: 4px;">`+ age_rating + `+</text>
+                                <br class="br40" />
+                                <img src="images/calendar3.svg" class="svg" />
+                                <text style="margin-left: 4px;">` + release_date + `</text>
+                                <br class="br40" />
+                                <img src="images/cash.svg" class="svg" />
+                                <text style="margin-left: 4px;">`+ ticket_price + `</text>`
+
+  res.locals.secondHiddenLi = secondHiddenLi;
+  res.locals.buttonOrProfile = buttonOrProfile;
+  res.locals.movieDetails = movieDetails;
+  res.locals.dateEmpty = dateEmpty;
+  res.locals.locationEmpty = locationEmpty;
+  res.render("buyTicket");
+})
+
+app.post("/buyTicket.ejs", function (req, res) {
+  date = req.body.date;
+  location = req.body.location;
+  showtime = req.body.showtime;
+  if (location === "Choose" && date === "") {
+    dateEmpty = `<i style="color: red;">Choose the Date</i>`;
+    locationEmpty = `<i style="color: red;">Choose the Location</i>`;
+    res.redirect("/buyTicket.ejs");
+  }
+  else if (location === "Choose") {
+    locationEmpty = `<i style="color: red;">Choose the Location</i>`;
+    res.redirect("/buyTicket.ejs");
+  }
+  else if (date === "") {
+    dateEmpty = `<i style="color: red;">Choose the Date</i>`;
+    res.redirect("/buyTicket.ejs");
+  }
+  else {
+    dateEmpty = "";
+    locationEmpty = "";
+
+    // console.log("Masuk buyTicket Post");
+    res.redirect("/seatPlan.ejs");
+  }
+});
+
+// Seat Plan
+app.get("/seatPlan.ejs", async function (req, res) {
+  var seatUsedArray = [];
+
+  let cinema = await getCinemaData(title, date, location, showtime, seatUsedArray);
+  if (cinema) {
+    seatUsedArray = cinema.seatUsed;
+  }
+
+
+  console.log(`seatUsedArray2: ${seatUsedArray}`);
+  console.log(`seatUsedArray.length: ${seatUsedArray.length}`);
+  if (seatUsedArray.length > 0) {
+    seatUsedArray.forEach((element) => {
+      if (element === "A1") {
+        console.log("A1 jadi Red dan Jadi button");
+        A1 = "red";
+        A1type = "button";
+      }
+      else if (element === "A2") {
+        A2 = "red";
+        A2type = "button";
+      }
+      else if (element === "A3") {
+        A3 = "red";
+        A3type = "button";
+      }
+      else if (element === "B1") {
+        B1 = "red";
+        B1type = "button";
+      }
+      else if (element === "B2") {
+        B2 = "red";
+        B2type = "button";
+      }
+      else if (element === "B3") {
+        B3 = "red";
+        B3type = "button";
+      }
+      else if (element === "C1") {
+        C1 = "red";
+        C1type = "button";
+      }
+      else if (element === "C2") {
+        C2 = "red";
+        C2type = "button";
+      }
+      else if (element === "C3") {
+        C3 = "red";
+        C3type = "button";
+      }
+    })
+  }
+  res.locals.A1 = A1;
+  res.locals.A2 = A2;
+  res.locals.A3 = A3;
+  res.locals.B1 = B1;
+  res.locals.B2 = B2;
+  res.locals.B3 = B3;
+  res.locals.C1 = C1;
+  res.locals.C2 = C2;
+  res.locals.C3 = C3;
+  res.locals.A1type = A1type;
+  res.locals.A2type = A2type;
+  res.locals.A3type = A3type;
+  res.locals.B1type = B1type;
+  res.locals.B2type = B2type;
+  res.locals.B3type = B3type;
+  res.locals.C1type = C1type;
+  res.locals.C2type = C2type;
+  res.locals.C3type = C3type;
+  res.locals.secondHiddenLi = secondHiddenLi;
+  res.locals.buttonOrProfile = buttonOrProfile;
+  res.locals.title = title;
+
+  const formatedDate = new Date(date).toLocaleDateString(
+    "en-US",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }
+  );
+
+  res.locals.date = formatedDate;
+  res.locals.location = location;
+  res.locals.showtime = showtime;
+  res.locals.total = numberToCurrency(total);
+  res.locals.ticketSelected = ticketSelected;
+  res.render("seatPlan");
+});
+
+app.post("/seatPlan.ejs", function (req, res) {
+  if (req.body.seat === "A1") {
+    if (A1 === "") {
+      A1 = "yellow";
+      seatSelected.push("A1");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      A1 = "";
+      seatSelected.pop("A1");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+
+  }
+  else if (req.body.seat === "A2") {
+    if (A2 === "") {
+      A2 = "yellow";
+      seatSelected.push("A2");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      A2 = "";
+      seatSelected.pop("A2");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "A3") {
+    if (A3 === "") {
+      A3 = "yellow";
+      seatSelected.push("A3");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      A3 = "";
+      seatSelected.pop("A3");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "B1") {
+    if (B1 === "") {
+      B1 = "yellow";
+      seatSelected.push("B1");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      B1 = "";
+      seatSelected.pop("B1");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "B2") {
+    if (B2 === "") {
+      B2 = "yellow";
+      seatSelected.push("B2");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      B2 = "";
+      seatSelected.pop("B2");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "B3") {
+    if (B3 === "") {
+      B3 = "yellow";
+      seatSelected.push("B3");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      B3 = "";
+      seatSelected.pop("B3");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+
+  }
+  else if (req.body.seat === "C1") {
+    if (C1 === "") {
+      C1 = "yellow";
+      seatSelected.push("C1");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      C1 = "";
+      seatSelected.pop("C1");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "C2") {
+    if (C2 === "") {
+      C2 = "yellow";
+      seatSelected.push("C2");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      C2 = "";
+      seatSelected.pop("C2");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "C3") {
+    if (C3 === "") {
+      C3 = "yellow";
+      seatSelected.push("C3");
+      total += ticket_price;
+      ticketSelected += 1;
+    }
+    else {
+      C3 = "";
+      seatSelected.pop("C3");
+      total -= ticket_price;
+      ticketSelected -= 1;
+    }
+  }
+  else if (req.body.seat === "confirm") {
+    res.redirect("/checkout.ejs")
+  }
+  // console.log(seatSelected);
+  res.redirect("/seatPlan.ejs");
+});
+
+// checkout page
+app.get("/checkout.ejs", function (req, res) {
+  res.locals.secondHiddenLi = secondHiddenLi;
+  res.locals.buttonOrProfile = buttonOrProfile;
+  res.locals.poster_url = poster_url;
+  res.locals.movie_title = title;
+  res.locals.location = location;
+
+  const formatedDate = new Date(date).toLocaleDateString(
+    "en-US",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }
+  );
+
+  res.locals.date = formatedDate;
+  res.locals.showtime = showtime;
+  res.locals.ticketSelected = ticketSelected;
+  res.locals.seatSelected = seatSelected;
+  res.locals.price = numberToCurrency(total);
+
+  const tax = total * 0.1;
+  res.locals.tax = numberToCurrency(tax);
+
+  totalWithTax = total + tax;
+  res.locals.totalWithTax = numberToCurrency(totalWithTax);
+
+
+  res.locals.balance = numberToCurrency(balance);
+
+  res.locals.modalsError = modalsError;
+  res.locals.modalsTopUp = modalsTopUp;
+
+  res.render("checkout");
+});
+
+app.post("/checkout.ejs", function (req, res) {
+  const button = req.body.button;
+  if (button === "pay") {
+    if (balance < totalWithTax) {
+      modalsError = "display: block;";
+      res.redirect("/checkout.ejs");
+    }
+    else {
+
+      // Urusan dengan Database
+      // put Code Here.....
+      const newBookingHistory = new BookingHistory({
+        username: username,
+        email: email,
+        movie_title: title,
+        location: location,
+        date: date,
+        showtime: showtime,
+        quantity: ticketSelected,
+        seat: seatSelected,
+        total: totalWithTax
+      })
+
+      // Masukin ke Booking History
+      newBookingHistory.save().then(function (savedBookingHistory) {
+        console.log("savedBookingHistory", savedBookingHistory);
+      }).catch((err) => console.log(err));
+
+      // Masukin ke Cinema
+      const query = {
+        movie_title: title,
+        date: date,
+        location: location,
+        showtime: showtime
+      };
+
+      var cinemaFound = false;
+      var theCinema = null;
+
+      Cinema.findOne(query).then(function (cinema) {
+        // console.log("Find the Cinema");
+        // console.log("cinema: ", cinema);
+        if (cinema) {
+          theCinema = cinema;
+          cinemaFound = true;
+        }
+        else {
+          console.log("Cinema Not Found");
+        }
+      }).catch((err) => console.log(err));
+
+      if (cinemaFound) {
+        const newSeatUsed = theCinema.seatUsed.concat(seatSelected);
+        Cinema.updateOne(query, { $set: { seatUsed: newSeatUsed } }).then(function (err) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+            console.log("success Update Seat Used in Cinema");
+          }
+        }).catch((err) => console.log(err));
+      }
+
+      else {
+        const newCinema = new Cinema({
+          movie_title: title,
+          date: date,
+          location: location,
+          showtime: showtime,
+          seatUsed: seatSelected
+        });
+
+        newCinema.save().then(function (savedCinema) {
+          console.log("savedCinema: ", savedCinema);
+        }).catch((err) => console.log(err));
+      }
+
+
+
+      // Update Balance User
+      const newBalance = balance - totalWithTax;
+
+      User.updateOne({ email: email }, { $set: { balance: newBalance } }).then(function (err) {
+        if (err) {
+          console.log(err);
+        }
+      }).catch((err) => console.log(err));
+
+      balance = newBalance;
+
+      // Reset
+      date = ""; location = ""; showtime = ""; total = 0; ticketSelected = 0;
+      seatSelected = []; totalWithTax = 0; dateEmpty = ""; locationEmpty = "";
+      A1 = ""; A2 = ""; A3 = ""; B1 = ""; B2 = ""; B3 = ""; C1 = ""; C2 = ""; C3 = "";
+      A1type = "submit"; A2type = "submit"; A3type = "submit"; B1type = "submit";
+      B2type = "submit"; B3type = "submit"; C1type = "submit"; C2type = "submit";
+      C3type = "submit"; modalsError = "display: none;"; modalsTopUp = "display: none;";
+      res.redirect("/success.ejs");
+    };
+  }
+  else if (button === "topUp") {
+    const newBalance = Number(req.body.nominal.slice(2)) + balance;
+    balance = newBalance;
+    User.updateOne({ email: email }, { balance: newBalance }).then(function (err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        balance = newBalance;
+      }
+    }).catch((err) => console.log(err));
+    modalsTopUp = "display: none;";
+    modalsError = "display: none;";
+    res.redirect("/checkout.ejs");
+  };
+});
+
+// success page
+app.get("/success.ejs", function (req, res) {
+  res.locals.balance = numberToCurrency(balance);
+  res.render("success");
+});
+
+// Profile-template Page
+app.get("/profile-template.ejs", function (req, res) {
+  res.render("profile-template");
+});
+
+// Profile Page
+app.get("/profile.ejs", function (req, res) {
+  res.render("profile");
 });
 
 app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`);
 });
+
+// Function
+function numberToCurrency(number) {
+  var numString = number.toString();
+  var result = "";
+  for (let i = numString.length - 1; i >= 0; i--) {
+    if ((numString.length - i) % 3 === 0 && i !== 0) {
+      result = "," + numString[i] + result;
+    }
+    else {
+      result = numString[i] + result;
+    }
+  }
+  return result;
+}
+
+async function getCinemaData(title, date, location, showtime) {
+  try {
+    const cinema = await Cinema.findOne({ movie_title: title, date: date, location: location, showtime: showtime });
+    // console.log("INSIDE getCinemaData , seatUsed: ", cinema.seatUsed);
+    return cinema;
+  }
+  catch (err) {
+    console.log(err);
+  }
+}

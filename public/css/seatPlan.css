@@ -1,0 +1,141 @@
+.jumbotron-img {
+  background-image: url("../images/bannerCheckout.jpg");
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  min-height: 200px;
+}
+
+.img-gradient {
+  background: rgb(10, 30, 94, 0.8);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 30, 94, 0.8) 0%,
+    rgba(0, 18, 50, 0.8) 100%
+  );
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.movie-desc {
+  background-color: #032055;
+}
+
+.jumbotron-text {
+  color: #ffff;
+}
+
+.pad40 {
+  padding: 40px 0px;
+}
+
+.back-btn {
+  border: 0px;
+  border-radius: 100px;
+  background-image: -webkit-linear-gradient(
+    169deg,
+    #5560ff 17%,
+    #aa52a1 63%,
+    #ff4343 100%
+  );
+  padding: 14px 30px;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  color: black;
+}
+
+text {
+  color: white;
+  font-size: 1rem;
+}
+
+#main {
+  background-color: #001232;
+}
+
+#num-ticket {
+  color: #31d7a9;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.cinema-screen {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0px;
+}
+
+.screen-icon {
+  width: 700px;
+}
+
+.seat-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 0px;
+}
+
+.seats {
+  width: 50%;
+}
+
+.seat {
+  padding: 20px 0px;
+}
+
+.seat-btn {
+  padding: 15px;
+  border: 0px;
+  border-radius: 4px;
+  font-size: 1.1rem;
+}
+
+.confirm-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0px;
+}
+
+.confirm-btn {
+  border: 0px;
+  border-radius: 100px;
+  background-image: -webkit-linear-gradient(
+    169deg,
+    #5560ff 17%,
+    #aa52a1 63%,
+    #ff4343 100%
+  );
+  padding: 14px 30px;
+  color: white;
+  font-size: 1.5rem;
+  transition: all300ms ease;
+}
+
+.confirm-btn:hover {
+  color: black;
+}
+
+.red {
+  background-color: #ff0060;
+  color: black;
+}
+
+.yellow {
+  background-color: #f5ba41;
+  color: black;
+}
+/* .cinema.screen {
+  height: 70px;
+  background: white;
+  width: 100%;
+  transform: rotateX(-30deg) scale(1.1);
+  box-shadow: 0 3px 10px 2px;
+} */

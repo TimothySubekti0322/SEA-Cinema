@@ -1,0 +1,118 @@
+body {
+  /* background: -webkit-linear-gradient(left, #3931af, #00c6ff); */
+  background-image: url("../images/login-bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.emp-profile {
+  padding: 3%;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  border-radius: 0.5rem;
+  background: #031637;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.profile-img {
+  text-align: center;
+}
+.profile-img img {
+  width: 70%;
+  height: 100%;
+}
+.profile-img .file {
+  position: relative;
+  overflow: hidden;
+  margin-top: -20%;
+  width: 70%;
+  border: none;
+  border-radius: 0;
+  font-size: 15px;
+  background: #212529b8;
+}
+.profile-img .file input {
+  position: absolute;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}
+.profile-head h5 {
+  /* color: #333; */
+  color: #00c6c1;
+}
+.profile-head h6 {
+  /* color: #0062cc; */
+  color: white;
+}
+.profile-edit-btn {
+  border: none;
+  border-radius: 1.5rem;
+  width: 70%;
+  padding: 2%;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+}
+.proile-rating {
+  font-size: 12px;
+  /* color: #818182; */
+  color: white;
+  margin-top: 5%;
+}
+.proile-rating span {
+  /* color: #495057; */
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+.profile-head .nav-tabs {
+  margin-bottom: 5%;
+}
+.profile-head .nav-tabs .nav-link {
+  font-weight: 600;
+  border: none;
+}
+.profile-head .nav-tabs .nav-link.active {
+  border: none;
+  border-bottom: 2px solid #0062cc;
+}
+.option-tab {
+  padding: 14%;
+  margin-top: -15%;
+}
+.option-tab p {
+  font-size: 12px;
+  /* color: #818182; */
+  color: white;
+  font-weight: 600;
+  margin-top: 10%;
+}
+.option-tab a {
+  text-decoration: none;
+  /* color: #495057; */
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+.option-tab ul {
+  list-style: none;
+}
+.profile-tab label {
+  font-weight: 600;
+}
+.profile-tab p {
+  font-weight: 600;
+  color: #0062cc;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1000px;
+  }
+}
+
+label {
+  color: white;
+}

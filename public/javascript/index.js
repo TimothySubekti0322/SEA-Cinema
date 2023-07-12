@@ -12,11 +12,11 @@ fetch("https://seleksi-sea-2023.vercel.app/api/movies")
                         alt="${movie.title} poster">
                     <title>${movie.title}</title>
                     <div class="card-body" style="background-color: #032055;">
-                        <h3 class="card-text" style="color: #fff; text-align: center; padding: 10px 0px;">${movie.title}</h3>
+                        <div class="h3-box"><h3 class="card-text" style="color: #fff; text-align: center; padding: 10px 0px;">${movie.title}</h3></div>
                         <hr style="border: 1px solid #fff;" />
                         <div class="d-flex justify-content-between align-items-center bottom-section">
                             <div class="btn-group gap-3" style="padding: 10px 0px display">
-                                <button type="submit" name="details" value = "${movie.title}" class="btn btn-primary btn-sm"
+                                <button type="submit" name="details" value = "details-${movie.title}" class="btn btn-primary btn-sm"
                                     style="border: 0px; border-radius: 4px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                         class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -29,7 +29,7 @@ fetch("https://seleksi-sea-2023.vercel.app/api/movies")
                                     </svg>
                                     <span>details</span>
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm"
+                                <button type="Submit" name="details" value="buyTicket-${movie.title}" class="btn btn-primary btn-sm"
                                     style="border: 0px; border-radius: 4px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                         class="bi bi-cart3" viewBox="0 0 16 16">
