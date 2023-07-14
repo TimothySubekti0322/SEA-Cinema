@@ -30,7 +30,7 @@ in case nodemon isn't installed yet , you can download the nodemon by run this c
   npm i -g nodemon
 ```
 
-Now you can run the website by type http://localhost:3000/ in your browser
+Now you can run the website by typing http://localhost:3000/ in your browser
 
 ## References
 
