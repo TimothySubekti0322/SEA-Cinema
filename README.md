@@ -4,7 +4,9 @@ SEA Movie Project is a mini project created as a selection task for the compfest
 
 ## Getting Started
 
-Install my-project with npm. first of all you need to go to root directory. then run this command below
+first of all you need to have node.js installed on your computer.
+
+Install all depedencies with npm. You need to go to root directory. then run this command below
 
 ```bash
   npm install
@@ -21,6 +23,11 @@ then to run the website locally , you need to run this command below
 
 ```bash
   nodemon app.js
+```
+
+in case nodemon isn't installed yet , you can download the nodemon by run this command
+```bash
+  npm i -g nodemon
 ```
 
 Now you can run the website by type http://localhost:3000/ in your browser
