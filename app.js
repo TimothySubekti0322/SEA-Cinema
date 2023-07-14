@@ -18,7 +18,7 @@ const mongoose = require("mongoose");
 const { render } = require("ejs");
 
 
-const mongo_url = process.env.MONGO_LOCAL_URL + process.env.MONGGO_DB_NAME;
+const mongo_url = process.env.MONGO_URL + process.env.MONGGO_DB_NAME;
 // Connect to MongoDB
 mongoose.connect(mongo_url, {
   useNewUrlParser: true,
