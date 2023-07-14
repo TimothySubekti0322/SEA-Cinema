@@ -1,11 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - SEA Movie</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/profile.css">
+    <!-- <link rel="stylesheet" href="css/ticket.css"> -->
 </head>
+
 <body>
-    
+    <form action="./profile.ejs" method="POST">
+        <div class="main-background">
+            <div class="container outer">
+                <div class="main-section">
+                    <div class="row">
+
+                        <!-- Left side -->
+                        <div class="col-lg-4 col-12 d-flex flex-column p-3">
+                            <div class="profile-image">
+                                <img
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" />
+                                <div class="file btn btn-lg btn-primary">
+                                    Change Photo
+                                    <input type="file" name="file" />
+                                </div>
+                            </div>
+                            <div class="username">
+                                <h5>
+                                    <%= username %>
+                                </h5>
+                            </div>
+                            <div class="option-tab mt-3 mb-3">
+                                <ul class="nav nav-pills flex-column mb-auto">
+                                    <li class="nav-item mb-3">
+                                        <a href="#" class="nav-link text-white active" aria-current="page">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                                <path fill-rule="evenodd"
+                                                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                            </svg>
+                                            profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="nav-link text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z" />
+                                                <path
+                                                    d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z" />
+                                            </svg>
+                                            Your Ticket
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="back-button-section">
+                                <button class="back-button"><a href="/" class="">Back</a></button>
+                            </div>
+                        </div>
+
+                        <!-- Right side -->
+                        <div class="col-lg-8 col-12 p-3 d-flex flex-column justify-content-between">
+
+                            <!-- Profile -->
+                            <div class="profile-information-section px-3 pb-3">
+
+                                <div class="row mb-4">
+                                    <div class="col-5">
+                                        <p class="information-text">Username</p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class="information-text username-value">
+                                            <%= username %>
+                                        </p>
+                                        <input type="text" name="username" value="<%= username %>"
+                                            class="username-input hide" minlength="1" maxlength="15">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-5">
+                                        <p class="information-text">Email</p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class="information-text">
+                                            <%= email %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 phone-row">
+                                    <div class="col-5">
+                                        <p class="information-text">Phone</p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class="information-text phone-value">
+                                            <%= phone %>
+                                        </p>
+                                        <input type="tel" name="phone" value="<%= phone %>" placeholder="081129331853"
+                                            class="phone-input hide" pattern="[0-9]{12}" id="phoneInput">
+                                        <p class="phone-format-text hide">format : 08xxxxxxxxxx (12 digits)</p>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-5">
+                                        <p class="information-text">Age</p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class="information-text age-value">
+                                            <%= age %>
+                                        </p>
+                                        <input type="number" name="age" value="<%= age %>" class="age-input hide"
+                                            min="1">
+                                    </div>
+                                </div>
+
+                                <div class=" row mb-4">
+                                    <div class="col-5">
+                                        <p class="information-text">Balance</p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class="information-text">Rp <%= balance %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ticket -->
+                            <div class="ticket-information-section px-3 pb-3 hide">
+
+                                <div class="row mb-4">
+                                    <div class="col-3">
+                                        <p class="information-text">Your Tickets</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <p class="information-text">
+                                            <%= numTicket %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-3">
+                                        <p class="information-text">Tickets</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="list-tickets-container">
+
+                                            <% for(let i=0 ; i < numTicket ; i++) { %>
+                                                <div class="row ticket-information">
+                                                    <div
+                                                        class="col-3 ticket-left-section d-flex flex-column align-items-center justify-content-center">
+                                                        <text class="left-date">
+                                                            <%= listTicket[i].date.slice(8,) %>
+                                                        </text class="left-date">
+                                                        <text class="left-month">
+                                                            <%= numberToMonth(Number (listTicket[i].date.slice(5,7))) %>
+                                                        </text class="left-month">
+                                                    </div>
+                                                    <div class="col-9 ticket-right-section d-flex flex-column">
+                                                        <text class="movie-title">
+                                                            <%= listTicket[i].movie_title %>
+                                                        </text class="movie-title">
+                                                        <div class="ticket-detail">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="grey" class="bi bi-calendar-event"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
+                                                                <path
+                                                                    d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                                            </svg>
+                                                            <text class="right-date">
+                                                                <%= formatDate(listTicket[i].date) %>
+                                                            </text>
+                                                        </div>
+                                                        <div class="ticket-detail">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="grey" class="bi bi-clock"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                                                                <path
+                                                                    d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                                                            </svg>
+                                                            <text class="showtime">
+                                                                <%= listTicket[i].showtime %>
+                                                            </text>
+                                                        </div>
+                                                        <div class="ticket-detail">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="grey" class="bi bi-geo-alt"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z" />
+                                                                <path
+                                                                    d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                                                            </svg><text class="location">
+                                                                <%= listTicket[i].location %>
+                                                            </text>
+                                                        </div>
+                                                        <div class="ticket-detail">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="grey"
+                                                                class="bi bi-ticket-perforated-fill"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5Zm4-1v1h1v-1H4Zm1 3v-1H4v1h1Zm7 0v-1h-1v1h1Zm-1-2h1v-1h-1v1Zm-6 3H4v1h1v-1Zm7 1v-1h-1v1h1Zm-7 1H4v1h1v-1Zm7 1v-1h-1v1h1Zm-8 1v1h1v-1H4Zm7 1h1v-1h-1v1Z" />
+                                                            </svg><text class="seat">
+                                                                <%= listTicket[i].seat.join(", ")%></text>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    <div class=" outer-right-button-section d-flex flex-column justify-content-end">
+                                                                    <div class="inner-right-button-section p-3">
+                                                                        <button class="edit-profile-button">Edit
+                                                                            profile</button>
+                                                                        <button class="top-up-button">Top
+                                                                            Up</button>
+                                                                        <button
+                                                                            class="withdraw-button">withdraw</button>
+                                                                        <button type="submit" name="button"
+                                                                            value="update-profile"
+                                                                            class="update-button hide">Update</button>
+                                                                        <button
+                                                                            class="cancel-button hide">Cancel</button>
+                                                                    </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Top Up Modals -->
+                                <div id="myModal" class="modal topUpModals" style="<%= modalsTopUp %>;">
+                                    <!-- Modal content -->
+                                    <div class="modalContent">
+                                        <div class="container">
+                                            <div class="row errorModalsHeadingsection mb-2">
+                                                <div class="col-10 p-0">
+                                                    <h2>Top Up wallet</h2>
+                                                </div>
+                                                <div class="col-2">
+                                                    <span class="close1 close2"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="24" height="24" fill="currentColor"
+                                                            class="bi bi-x-lg" viewBox="0 0 18 18">
+                                                            <path
+                                                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                                        </svg></span>
+                                                </div>
+                                            </div>
+                                            <p>Enter Nominal</p>
+                                            <input type="text" name="nominal" class="form-control my-3"
+                                                id="topUpNominal" placeholder="Rp 100,000">
+                                            <div class="mt-5 text-end">
+                                                <button type="submit" name="button" value="topUp"
+                                                    class="topUpNowButton">Top Up
+                                                    Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Withdraw Modals -->
+                                <div id="myModal" class="modal withdrawModals" style="<%= modalsWithdraw %>;">
+                                    <!-- Modal content -->
+                                    <div class="modalContent">
+                                        <div class="container">
+                                            <div class="row errorModalsHeadingsection mb-2">
+                                                <div class="col-10 p-0">
+                                                    <h2>Withdraw</h2>
+                                                </div>
+                                                <div class="col-2">
+                                                    <span class="close1 close3"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="24" height="24" fill="currentColor"
+                                                            class="bi bi-x-lg" viewBox="0 0 18 18">
+                                                            <path
+                                                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                                        </svg></span>
+                                                </div>
+                                            </div>
+                                            <p>Enter Nominal</p>
+                                            <input type="text" name="nominalWithdraw" class="form-control my-3"
+                                                id="withdrawNominal" placeholder="Rp 100,000">
+                                            <div class="mt-5 text-end">
+                                                <button type="submit" name="button" value="withdraw"
+                                                    class="topUpNowButton">Withdraw Now</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Error Modals -->
+                                <div id="myModal" class="modal withdrawErrorModals" style="<%= modalsWithdrawError %>;">
+
+                                    <!-- Modal content -->
+                                    <div class="modalContent">
+                                        <div class="container">
+                                            <div class="row errorModalsHeadingsection">
+                                                <div class="col-10">
+                                                    <div class="d-flex align-items-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            fill="#A32A30" class="bi bi-exclamation-octagon-fill"
+                                                            viewBox="0 0 18 18">
+                                                            <path
+                                                                d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                                        </svg>
+                                                        <text class="errorHeading">Error</text>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-2">
+                                                    <span class="close1 close4"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="24" height="24" fill="currentColor"
+                                                            class="bi bi-x-lg" viewBox="0 0 18 18">
+                                                            <path
+                                                                d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                                        </svg></span>
+                                                </div>
+                                            </div>
+                                            <hr class="customHR" />
+                                            <p class="errorHeadingBelow">
+                                                <%= withdrawErrorMessage %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="javascript/profile.js"></script>
 </body>
+
 </html>

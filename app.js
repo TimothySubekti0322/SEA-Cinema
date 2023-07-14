@@ -18,9 +18,9 @@ const mongoose = require("mongoose");
 const { render } = require("ejs");
 
 
-
+const mongo_url = process.env.MONGO_LOCAL_URL + process.env.MONGGO_DB_NAME;
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_LOCAL_URL, {
+mongoose.connect(mongo_url, {
   useNewUrlParser: true,
 });
 
@@ -29,7 +29,9 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
-  balance: Number
+  balance: Number,
+  phone: { type: String, default: "-" },
+  age: Number
 });
 
 const bookingHistorySchema = new mongoose.Schema({
@@ -65,12 +67,17 @@ const apiURL = "https://seleksi-sea-2023.vercel.app/api/movies";
 var logedIn = false;
 var username = "";
 var email = "";
+var phone = "-";
 var balance = 0;
+var password = "";
+var age = 0;
 var buttonOrProfile = `<div class="col-md-2 text-end py-sm-3 py-lg-0">
                             <a href="./login.ejs"><button type="button" class="btn signup px-5 py-3">JOIN US</button></a>
                         </div>`;
 
 var secondHiddenLi = "";
+var listTicket = "";
+var numTicket = 0;
 
 var poster_url = "";
 var title = "";
@@ -112,6 +119,11 @@ var C3type = "submit";
 
 var modalsError = "display: none;";
 var modalsTopUp = "display: none;";
+var modalsWithdraw = "display: none;";
+var modalsWithdrawError = "display: none;";
+var modalsSeatError = "display: none;";
+var withdrawErrorMessage = "";
+var modalsUnderAge = "display: none;";
 
 // Home Page
 app.get("/", function (req, res) {
@@ -124,6 +136,13 @@ app.get("/", function (req, res) {
   locationEmpty = "";
   A1 = ""; A2 = ""; A3 = ""; B1 = ""; B2 = ""; B3 = ""; C1 = ""; C2 = ""; C3 = "";
   totalWithTax = 0;
+  modalsError = "display: none;";
+  modalsTopUp = "display: none;";
+  modalsWithdraw = "display: none;";
+  modalsWithdrawError = "display: none;";
+  withdrawErrorMessage = "";
+  modalsSeatError = "display: none;";
+  modalsUnderAge = "display: none;";
 
   if (logedIn) {
     buttonOrProfile = `<div class="dropdown text-end">
@@ -138,8 +157,7 @@ app.get("/", function (req, res) {
                                 <p style="display: inline">`+ username + `</p>
                             </a>
                             <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                                <li><a class="dropdown-item" href="#"></a></li>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="./profile.ejs">Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -179,7 +197,6 @@ app.post("/", function (req, res) {
               description = movie.description;
             }
           })
-
           res.redirect("/buyTicket.ejs");
         }).catch((err) => console.log(`An error occurred: ${err}`));
     }
@@ -206,13 +223,6 @@ app.post("/", function (req, res) {
       }).catch((err) => console.log(`An error occurred: ${err}`));
 
   }
-
-
-
-
-  // res.render("details", { secondHiddenLi: secondHiddenLi, buttonOrProfile: buttonOrProfile, poster_url: poster_url, title: title, age_rating: age_rating, release_date: release_date, ticket_price: ticket_price, description: description });
-
-
 })
 
 // Login Page
@@ -226,6 +236,7 @@ app.get("/login.ejs", function (req, res) {
                         </div>`;
 
   secondHiddenLi = "";
+  phone = "-";
 
   // poster_url = "";
   // title = "";
@@ -238,6 +249,7 @@ app.get("/login.ejs", function (req, res) {
 
 app.post("/login", function (req, res) {
   email = req.body.email;
+  emailWarning = "";
   const password = md5(req.body.password);
   User.findOne({ email: email }).then(function (userFound) {
     if (userFound) {
@@ -245,10 +257,12 @@ app.post("/login", function (req, res) {
 
         secondHiddenLi = "";
         balance = userFound.balance;
+        age = userFound.age;
+
         // Tidy Up the Header
         let usernamaLength = userFound.username.length;
-        // console.log(usernamaLength);
         let userName = userFound.username;
+        phone = userFound.phone;
         if (usernamaLength > 15) {
           userName = userName.slice(0, 13) + "..";
         }
@@ -269,8 +283,7 @@ app.post("/login", function (req, res) {
                                 <p style="display: inline">` + userName + `</p>
                             </a>
                             <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                                <li><a class="dropdown-item" href="#"></a></li>
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="./profile.ejs">Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
@@ -306,23 +319,12 @@ app.post("/signup", function (req, res) {
       if (userFound) {
         res.render("signup", { emailWarn: "Email has been registered" });
       } else {
-        const newUser = new User({
-          username: req.body.username,
-          email: req.body.email,
-          password: md5(req.body.password),
-          balance: 0
-        });
+        username = req.body.username;
+        email = req.body.email;
+        password = req.body.password;
+        balance = 0;
 
-        newUser
-          .save()
-          .then(function (savedUser) {
-            console.log("User saved successfully:", savedUser);
-            res.render("login", { incorrectCredential: "" });
-          })
-          .catch(function (err) {
-            console.log("Error saving user: " + err);
-            return res.status(500).send("Error: " + err.message);
-          });
+        res.redirect("/ageVerification.ejs");
       }
     })
     .catch(function (err) {
@@ -331,8 +333,38 @@ app.post("/signup", function (req, res) {
     });
 });
 
+app.get("/ageVerification.ejs", function (req, res) {
+  res.render("ageVerification");
+});
+
+app.post("/ageVerification.ejs", function (req, res) {
+  const newUser = new User({
+    username: username,
+    email: email,
+    password: md5(password),
+    balance: balance,
+    age: req.body.age,
+  });
+
+  newUser.save().then(function (user) {
+    console.log("New user created: " + user);
+  }).catch((err) => {
+    console.log("Error saving user: " + err);
+    return res.status(500).send("Error: " + err.message);
+  });
+
+  username = "";
+  email = "";
+  password = "";
+  balance = 0;
+  age = 0;
+
+  res.redirect("/login.ejs");
+});
+
 // Details page
 app.get("/details.ejs", function (req, res) {
+  modalsUnderAge = "display: none;";
   let movieDetails = `    <form action="/details.ejs" method="POST"><div class="body-section">
         <div class="container col-xxl-8 px-4 py-4">
             <div class="row flex-lg-row align-items-start py-5">
@@ -396,6 +428,13 @@ app.post("/details.ejs", function (req, res) {
 
 });
 
+// About Me page
+
+app.get("/about.ejs", function (req, res) {
+  res.render("about", { secondHiddenLi: secondHiddenLi, buttonOrProfile: buttonOrProfile });
+});
+
+
 // Buy Ticket
 app.get("/buyTicket.ejs", function (req, res) {
   let movieDetails = `          <img src="` + poster_url + `"
@@ -417,6 +456,18 @@ app.get("/buyTicket.ejs", function (req, res) {
   res.locals.movieDetails = movieDetails;
   res.locals.dateEmpty = dateEmpty;
   res.locals.locationEmpty = locationEmpty;
+  res.locals.modalsUnderAge = modalsUnderAge;
+  res.locals.age_rating = age_rating;
+
+  A1 = ""; A2 = ""; A3 = ""; B1 = ""; B2 = ""; B3 = ""; C1 = ""; C2 = ""; C3 = "";
+  A1type = "submit"; A2type = "submit"; A3type = "submit"; B1type = "submit";
+  B2type = "submit"; B3type = "submit"; C1type = "submit"; C2type = "submit";
+  C3type = "submit";
+
+  date = ""; location = ""; showtime = "";
+
+  total = 0; ticketSelected = 0;
+
   res.render("buyTicket");
 })
 
@@ -424,30 +475,38 @@ app.post("/buyTicket.ejs", function (req, res) {
   date = req.body.date;
   location = req.body.location;
   showtime = req.body.showtime;
-  if (location === "Choose" && date === "") {
-    dateEmpty = `<i style="color: red;">Choose the Date</i>`;
-    locationEmpty = `<i style="color: red;">Choose the Location</i>`;
-    res.redirect("/buyTicket.ejs");
-  }
-  else if (location === "Choose") {
-    locationEmpty = `<i style="color: red;">Choose the Location</i>`;
-    res.redirect("/buyTicket.ejs");
-  }
-  else if (date === "") {
-    dateEmpty = `<i style="color: red;">Choose the Date</i>`;
+  if (age < age_rating) {
+    modalsUnderAge = "display: block;";
     res.redirect("/buyTicket.ejs");
   }
   else {
-    dateEmpty = "";
-    locationEmpty = "";
-
-    // console.log("Masuk buyTicket Post");
-    res.redirect("/seatPlan.ejs");
+    if (location === "Choose" && date === "") {
+      dateEmpty = `<i style="color: red;">Choose the Date</i>`;
+      locationEmpty = `<i style="color: red;">Choose the Location</i>`;
+      res.redirect("/buyTicket.ejs");
+    }
+    else if (location === "Choose") {
+      locationEmpty = `<i style="color: red;">Choose the Location</i>`;
+      res.redirect("/buyTicket.ejs");
+    }
+    else if (date === "") {
+      dateEmpty = `<i style="color: red;">Choose the Date</i>`;
+      res.redirect("/buyTicket.ejs");
+    }
+    else {
+      dateEmpty = "";
+      locationEmpty = "";
+      modalsSeatError = "display: none;"
+      // console.log("Masuk buyTicket Post");
+      res.redirect("/seatPlan.ejs");
+    }
   }
+
 });
 
 // Seat Plan
 app.get("/seatPlan.ejs", async function (req, res) {
+
   var seatUsedArray = [];
 
   let cinema = await getCinemaData(title, date, location, showtime, seatUsedArray);
@@ -535,143 +594,155 @@ app.get("/seatPlan.ejs", async function (req, res) {
   res.locals.showtime = showtime;
   res.locals.total = numberToCurrency(total);
   res.locals.ticketSelected = ticketSelected;
+  res.locals.modalsSeatError = modalsSeatError;
+
   res.render("seatPlan");
 });
 
 app.post("/seatPlan.ejs", function (req, res) {
-  if (req.body.seat === "A1") {
-    if (A1 === "") {
-      A1 = "yellow";
-      seatSelected.push("A1");
-      total += ticket_price;
-      ticketSelected += 1;
+  if (ticketSelected === 6) {
+    if (req.body.seat !== "confirm") {
+      modalsSeatError = "display: block;";
+      res.redirect("/seatPlan.ejs");
     }
-    else {
-      A1 = "";
-      seatSelected.pop("A1");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
+  }
+  if (((ticketSelected === 6) && (req.body.seat === "confirm")) || (ticketSelected < 6)) {
+    if (req.body.seat === "A1") {
+      if (A1 === "") {
+        A1 = "yellow";
+        seatSelected.push("A1");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        A1 = "";
+        seatSelected.pop("A1");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
 
-  }
-  else if (req.body.seat === "A2") {
-    if (A2 === "") {
-      A2 = "yellow";
-      seatSelected.push("A2");
-      total += ticket_price;
-      ticketSelected += 1;
     }
-    else {
-      A2 = "";
-      seatSelected.pop("A2");
-      total -= ticket_price;
-      ticketSelected -= 1;
+    else if (req.body.seat === "A2") {
+      if (A2 === "") {
+        A2 = "yellow";
+        seatSelected.push("A2");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        A2 = "";
+        seatSelected.pop("A2");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
     }
-  }
-  else if (req.body.seat === "A3") {
-    if (A3 === "") {
-      A3 = "yellow";
-      seatSelected.push("A3");
-      total += ticket_price;
-      ticketSelected += 1;
+    else if (req.body.seat === "A3") {
+      if (A3 === "") {
+        A3 = "yellow";
+        seatSelected.push("A3");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        A3 = "";
+        seatSelected.pop("A3");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
     }
-    else {
-      A3 = "";
-      seatSelected.pop("A3");
-      total -= ticket_price;
-      ticketSelected -= 1;
+    else if (req.body.seat === "B1") {
+      if (B1 === "") {
+        B1 = "yellow";
+        seatSelected.push("B1");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        B1 = "";
+        seatSelected.pop("B1");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
     }
-  }
-  else if (req.body.seat === "B1") {
-    if (B1 === "") {
-      B1 = "yellow";
-      seatSelected.push("B1");
-      total += ticket_price;
-      ticketSelected += 1;
+    else if (req.body.seat === "B2") {
+      if (B2 === "") {
+        B2 = "yellow";
+        seatSelected.push("B2");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        B2 = "";
+        seatSelected.pop("B2");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
     }
-    else {
-      B1 = "";
-      seatSelected.pop("B1");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
-  }
-  else if (req.body.seat === "B2") {
-    if (B2 === "") {
-      B2 = "yellow";
-      seatSelected.push("B2");
-      total += ticket_price;
-      ticketSelected += 1;
-    }
-    else {
-      B2 = "";
-      seatSelected.pop("B2");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
-  }
-  else if (req.body.seat === "B3") {
-    if (B3 === "") {
-      B3 = "yellow";
-      seatSelected.push("B3");
-      total += ticket_price;
-      ticketSelected += 1;
-    }
-    else {
-      B3 = "";
-      seatSelected.pop("B3");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
+    else if (req.body.seat === "B3") {
+      if (B3 === "") {
+        B3 = "yellow";
+        seatSelected.push("B3");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        B3 = "";
+        seatSelected.pop("B3");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
 
+    }
+    else if (req.body.seat === "C1") {
+      if (C1 === "") {
+        C1 = "yellow";
+        seatSelected.push("C1");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        C1 = "";
+        seatSelected.pop("C1");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
+    }
+    else if (req.body.seat === "C2") {
+      if (C2 === "") {
+        C2 = "yellow";
+        seatSelected.push("C2");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        C2 = "";
+        seatSelected.pop("C2");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
+    }
+    else if (req.body.seat === "C3") {
+      if (C3 === "") {
+        C3 = "yellow";
+        seatSelected.push("C3");
+        total += ticket_price;
+        ticketSelected += 1;
+      }
+      else {
+        C3 = "";
+        seatSelected.pop("C3");
+        total -= ticket_price;
+        ticketSelected -= 1;
+      }
+    }
+    else if (req.body.seat === "confirm") {
+      modalsSeatError = "display: none;";
+      res.redirect("/checkout.ejs")
+    }
+    // console.log(seatSelected);
+    modalsSeatError = "display: none;"
+    res.redirect("/seatPlan.ejs");
   }
-  else if (req.body.seat === "C1") {
-    if (C1 === "") {
-      C1 = "yellow";
-      seatSelected.push("C1");
-      total += ticket_price;
-      ticketSelected += 1;
-    }
-    else {
-      C1 = "";
-      seatSelected.pop("C1");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
-  }
-  else if (req.body.seat === "C2") {
-    if (C2 === "") {
-      C2 = "yellow";
-      seatSelected.push("C2");
-      total += ticket_price;
-      ticketSelected += 1;
-    }
-    else {
-      C2 = "";
-      seatSelected.pop("C2");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
-  }
-  else if (req.body.seat === "C3") {
-    if (C3 === "") {
-      C3 = "yellow";
-      seatSelected.push("C3");
-      total += ticket_price;
-      ticketSelected += 1;
-    }
-    else {
-      C3 = "";
-      seatSelected.pop("C3");
-      total -= ticket_price;
-      ticketSelected -= 1;
-    }
-  }
-  else if (req.body.seat === "confirm") {
-    res.redirect("/checkout.ejs")
-  }
-  // console.log(seatSelected);
-  res.redirect("/seatPlan.ejs");
 });
 
 // checkout page
@@ -835,18 +906,106 @@ app.get("/success.ejs", function (req, res) {
   res.render("success");
 });
 
-// Profile-template Page
-app.get("/profile-template.ejs", function (req, res) {
-  res.render("profile-template");
-});
 
 // Profile Page
-app.get("/profile.ejs", function (req, res) {
-  res.render("profile");
+app.get("/profile.ejs", async function (req, res) {
+  if (!logedIn) {
+    res.redirect("/login.ejs");
+  }
+  else {
+    numTicket = 0;
+    listTicket = [];
+    res.locals.username = username;
+    res.locals.email = email;
+    res.locals.phone = phone;
+    res.locals.balance = numberToCurrency(balance);
+    res.locals.age = age;
+
+    listTicket = await BookingHistory.find({ email: email });
+    numTicket = listTicket.length;
+
+    res.locals.numTicket = numTicket;
+    res.locals.listTicket = listTicket;
+    res.locals.modalsTopUp = modalsTopUp;
+    res.locals.modalsWithdraw = modalsWithdraw;
+    res.locals.modalsWithdrawError = modalsWithdrawError;
+    res.locals.withdrawErrorMessage = withdrawErrorMessage;
+    res.render("profile", { numberToMonth, formatDate });
+  }
+});
+
+app.post("/profile.ejs", function (req, res) {
+  const button = req.body.button;
+  console.log("button: ", button);
+  if (button === "update-profile") {
+    const newUserName = req.body.username;
+    const newPhone = req.body.phone;
+    const newAge = req.body.age;
+    User.updateOne({ email: email }, { username: newUserName, phone: newPhone, age: newAge }).then(function (err) {
+      if (err) {
+        console.log(err);
+      }
+    }).catch((err) => console.log(err));
+
+    username = newUserName;
+    phone = newPhone;
+    age = newAge;
+    console.log("username: ", username);
+    console.log("phone: ", phone);
+    console.log("age: ", age);
+
+    res.redirect("/profile.ejs");
+  }
+  else if (button === "topUp") {
+    const newBalance = Number(req.body.nominal.slice(2)) + balance;
+    balance = newBalance;
+    User.updateOne({ email: email }, { balance: newBalance }).then(function (err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        balance = newBalance;
+      }
+    }).catch((err) => console.log(err));
+    modalsTopUp = "display: none;";
+    // alert('Balance updated')
+    res.redirect("/profile.ejs");
+  }
+  else if (button === "withdraw") {
+    const nominalWithdraw = Number(req.body.nominalWithdraw.slice(2));
+    console.log("nominalWithdraw: ", nominalWithdraw);
+    console.log("balance: ", balance);
+    if ((nominalWithdraw <= balance) && (nominalWithdraw <= 500000)) {
+      const newBalance = balance - nominalWithdraw;
+      balance = newBalance;
+      User.updateOne({ email: email }, { balance: newBalance }).then(function (err) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          balance = newBalance;
+        }
+      }).catch((err) => console.log(err));
+      modalsWithdraw = "display: none;";
+      modalsWithdrawError = "display: none;";
+      withdrawErrorMessage = "";
+      res.redirect("/profile.ejs");
+    }
+    else if (nominalWithdraw > balance) {
+      modalsWithdrawError = "display: block;";
+      withdrawErrorMessage = "Insufficient balance";
+      res.redirect("/profile.ejs");
+    }
+    else if (nominalWithdraw > 500000) {
+      modalsWithdrawError = "display: block;";
+      withdrawErrorMessage = "Maximum withdraw is Rp. 500.000";
+      res.redirect("/profile.ejs");
+    }
+  }
 });
 
 app.listen(port, function () {
-  console.log(`Example app listening on port ${port}!`);
+  console.log(`App listening on port ${port}!`);
 });
 
 // Function
@@ -873,4 +1032,50 @@ async function getCinemaData(title, date, location, showtime) {
   catch (err) {
     console.log(err);
   }
+}
+
+function numberToMonth(number) {
+  switch (number) {
+    case 1:
+      return "January";
+      break;
+    case 2:
+      return "February";
+      break;
+    case 3:
+      return "March";
+      break;
+    case 4:
+      return "April";
+      break;
+    case 5:
+      return "May";
+      break;
+    case 6:
+      return "June";
+      break;
+    case 7:
+      return "July";
+      break;
+    case 8:
+      return "August";
+      break;
+    case 9:
+      return "September";
+      break;
+    case 10:
+      return "October";
+  }
+}
+
+function formatDate(date) {
+  const formatedDate = new Date(date).toLocaleDateString(
+    "en-US",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }
+  );
+  return formatedDate;
 }

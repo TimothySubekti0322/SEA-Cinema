@@ -4,15 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Plan - SEA Movie</title>
-    <link rel="stylesheet" href="css/buyTicket.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <title>About us - SEA Movie</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/details.css">
 </head>
 
 <body>
-
     <!-- ==========Header-Section========== -->
 
     <header class="header-section">
@@ -59,81 +58,44 @@
     </header>
     <!-- ==========Header-Section========== -->
 
-    <main>
-        <div class="jumbotron-img">
-            <div class="py-5 text-center img-gradient">
-                <div class="jumbotron-text">
-                    <h2>CHOOSE YOUR PLAN</h2>
+    <!-- ==========About-Section========== -->
+
+    <div class="body-section">
+        <div class="container col-xxl-8 px-4 py-4">
+            <div class="row flex-lg-row align-items-start py-5">
+                <div class="col-10 col-sm-8 col-lg-4 mb-md-3" style="text-align: start;">
+                    <img src="images/about.jpg" class="d-block mr-lg-auto img-fluid" alt="Bootstrap Themes" width="250"
+                        height="75" loading="lazy">
                 </div>
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-bold lh-1 mb-lg-5 mb-3">ABOUT ME</h2>
+                    <p class="lead mb-5">Welcome to my portfolio! I'm Timothy Subekti, a dedicated software engineering
+                        student currently in my fifth semester at
+                        Institut Technology Bandung. I'm thrilled to showcase my work, particularly my latest project
+                        called the SEA-Movie
+                        Project, which focuses on creating a seamless movie ticket booking platform.
 
-            </div>
-        </div>
-        <!-- <div class="setPlan">
-            <h2 class="setPlanText">CHOOSE YOUR PLAN</h2>
-        </div> -->
+                        Building the SEA-Movie Project has been an important milestone on my journey toward becoming a
+                        professional software
+                        engineer. With each project, I aim to challenge myself and continuously refine my skills. My
+                        passion lies in My passion lies in building user-friendly, efficient, and dynamic web
+                        applications with any Stack Technology.
 
-        <div class="container main-below">
-            <div class="row mt-5">
-                <div class="col-md-11 col-lg-12">
-                    <form class="needs-validation" method="POST" action="/buyTicket.ejs" novalidate="">
-                        <div class="row mb-4">
-                            <div class="col-md-5">
-                                <%- movieDetails %>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="col-md-9 mb-5">
-                                    <label for="date" class="form-label">Choose Date</label><br />
-                                    <input type="date" class="form-control" name="date" required>
-                                    <%- dateEmpty %>
-                                </div>
-
-                                <div class="col-md-9 mb-4">
-                                    <label for="location" class="form-label">Choose Location</label><br />
-                                    <select class="form-select" name="location" id="location" required>
-                                        <option value="Choose">Choose..</option>
-                                        <option value="Artha Gading Cinema">Artha Gading Cinema</option>
-                                        <option value="Atrium Cinema">Atrium Cinema</option>
-                                        <option value="Central Park Cinema">Central Park Cinema</option>
-                                        <option value="Emporium Cinema">Emporium Cinema</option>
-                                        <option value="Gandaria City Cinema">Gandaria City Cinema</option>
-                                        <option value="Grand Indonesia Cinema">Grand Indonesia Cinema</option>
-                                        <option value="Kelapa Gading Cinema">Kelapa Gading Cinema</option>
-                                        <option value="Kemang Vilage Cinema">Kemang Vilage Cinema</option>
-                                        <option value="Kuningan City Cinema">Kuningan City Cinema</option>
-                                        <option value="PGC Cinema">PGC Cinema</option>
-                                    </select>
-                                    <%- locationEmpty %>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-10 mb-5 py-4">
-                            <label for="date" class="form-label">Showtime</label><br />
-                            <div class="row gy-3">
-                                <div class="col-sm-3">
-                                    <input type="submit" name="showtime" class="showtime-btn col" value="10:00">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="submit" name="showtime" class="showtime-btn" value="12:00">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="submit" name="showtime" class="showtime-btn" value="14:00">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="submit" name="showtime" class="showtime-btn" value="16:00">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="submit" name="showtime" class="showtime-btn" value="18:00">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="submit" name="showtime" class="showtime-btn" value="20:00">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                        As an ambitious and diligent individual, I'm constantly seeking opportunities to expand my
+                        knowledge and gain new
+                        skills. I am dedicated to staying updated with the latest advancements in the field, attending
+                        workshops and online
+                        courses to ensure I'm equipped with the most cutting-edge tools and techniques.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <!-- <button type="submit" name="buyTicket" value="buyTicket"
+                            class="btn book btn-lg px-4 me-md-2">Book Ticket</button> -->
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+
+    <!-- ==========About-Section========== -->
 
     <!-- ============ Footer ============ -->
     <div class="footer">
@@ -172,45 +134,6 @@
         </div>
     </div>
     <!-- ============ Footer ============ -->
-
-    <!-- ============ Modals ============ -->
-
-    <!-- Error Modals -->
-    <div id="myModal" class="modal" style="<%= modalsUnderAge %>;">
-
-        <!-- Modal content -->
-        <div class="modalContent">
-            <div class="container">
-                <div class="row errorModalsHeadingsection">
-                    <div class="col-10">
-                        <div class="d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#A32A30"
-                                class="bi bi-exclamation-octagon-fill" viewBox="0 0 18 18">
-                                <path
-                                    d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                            </svg>
-                            <text class="errorHeading">Error</text>
-                        </div>
-
-                    </div>
-                </div>
-                <hr class="customHR" />
-                <p class="errorHeadingBelow">You're under-age</p>
-                <p>you need at least <%= age_rating %> years old to watch this movie</p>
-                <div class="mt-5 text-end">
-                    <a href="/"><button class="topUpButton">Home Page</button></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============ Modals ============ -->
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="javascript/buyTicket.js" charset="UTF-8"></script>
 </body>
 
 </html>

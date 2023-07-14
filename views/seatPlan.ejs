@@ -34,12 +34,12 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <a href="./profile.ejs" class="nav-link text-white">
                                 Your Ticket
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <a href="./about.ejs" class="nav-link text-white">
                                 About
                             </a>
                         </li>
@@ -190,9 +190,50 @@
         </div>
     </div>
     <!-- ============ Footer ============ -->
+
+    <!-- ============ Modals ============ -->
+
+    <!-- Error Modals -->
+    <div id="myModal" class="modal modalsSeatError" style="<%= modalsSeatError %>;">
+
+        <!-- Modal content -->
+        <div class="modalContent">
+            <div class="container">
+                <div class="row errorModalsHeadingsection">
+                    <div class="col-10">
+                        <div class="d-flex align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#A32A30"
+                                class="bi bi-exclamation-octagon-fill" viewBox="0 0 18 18">
+                                <path
+                                    d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                            </svg>
+                            <text class="errorHeading">Error</text>
+                        </div>
+
+                    </div>
+                    <div class="col-2">
+                        <span class="close1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                fill="currentColor" class="bi bi-x-lg" viewBox="0 0 18 18">
+                                <path
+                                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                            </svg></span>
+                    </div>
+                </div>
+                <hr class="customHR" />
+                <p class="errorHeadingBelow">
+                    You've reached maximum number of tickets that can be booked at a time.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ Modals ============ -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
         crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="javascript/seatPlan.js" charset="utf-8"></script>
 </body>
 
 </html>

@@ -108,3 +108,99 @@ img.svg {
   background-color: #f5ba41;
   color: white;
 }
+
+/* The Modal (background) */
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal * {
+  color: black;
+}
+
+/* Modal Content */
+.modalContent {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+
+/* The Close Button */
+.close1 {
+  color: #aaaaaa;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.errorHeading {
+  color: #a32a30;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-left: 15px;
+  padding-bottom: 4px;
+}
+
+.errorModalsHeadingsection {
+  height: 35px;
+}
+
+.customHR {
+  border: 2px solid #526d82;
+}
+
+.errorHeadingBelow {
+  font-size: 24px;
+  font-weight: 500;
+  color: #595959;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.topUpButton {
+  background-color: #020b22;
+  border: 0px;
+  border-radius: 4px;
+  background-color: #3eb2fd;
+  background-image: linear-gradient(1deg, #4f58fd, #149bf3 99%);
+  color: #f5f5f5;
+  box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+    rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+  padding: 10px 20px;
+}
+
+.topUpNowButton {
+  background-color: #f27151;
+  border: 0px;
+  border-radius: 4px;
+  background-color: #3eb2fd;
+  background-image: linear-gradient(1deg, #4f58fd, #149bf3 99%);
+  color: #f5f5f5;
+  box-shadow: rgba(60, 64, 67, 0.3) 0 1px 3px 0,
+    rgba(60, 64, 67, 0.15) 0 4px 8px 3px;
+  padding: 10px 20px;
+}
+
+.topUpButton:hover,
+.topUpNowButton :hover {
+  color: black;
+}
