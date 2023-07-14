@@ -22,7 +22,7 @@ Next, Create a .env file that contains your personal database. Copy this code be
 then to run the website locally , you need to run this command below
 
 ```bash
-  nodemon app.js
+  nodemon index.js
 ```
 
 in case nodemon isn't installed yet , you can download the nodemon by run this command
