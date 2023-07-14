@@ -39,11 +39,9 @@ body {
   top: 0;
 }
 .profile-head h5 {
-  /* color: #333; */
   color: #00c6c1;
 }
 .profile-head h6 {
-  /* color: #0062cc; */
   color: white;
 }
 .profile-edit-btn {
@@ -57,12 +55,10 @@ body {
 }
 .proile-rating {
   font-size: 12px;
-  /* color: #818182; */
   color: white;
   margin-top: 5%;
 }
 .proile-rating span {
-  /* color: #495057; */
   color: white;
   font-size: 15px;
   font-weight: 600;
@@ -91,7 +87,6 @@ body {
 }
 .option-tab a {
   text-decoration: none;
-  /* color: #495057; */
   color: white;
   font-weight: 600;
   font-size: 14px;

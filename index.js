@@ -129,7 +129,6 @@ var modalsUnderAge = "display: none;";
 
 // Home Page
 app.get("/", function (req, res) {
-  // res.sendFile(__dirname + "/index.html");
   let buttonOrProfile = "";
   total = 0;
   ticketSelected = 0;
@@ -188,7 +187,6 @@ app.post("/", function (req, res) {
         .then((response) => response.json())
         .then((data) => {
           data.forEach((movie) => {
-            // console.log(`${count++} : ${movie.title} : ${buttonValue}`);
             if (movie.title == buttonValue.slice(10,)) {
               poster_url = movie.poster_url;
               title = movie.title;
@@ -209,7 +207,7 @@ app.post("/", function (req, res) {
       .then((response) => response.json())
       .then((data) => {
         data.forEach((movie) => {
-          // console.log(`${count++} : ${movie.title} : ${buttonValue}`);
+
           if (movie.title == buttonValue.slice(8,)) {
 
             poster_url = movie.poster_url;
@@ -240,12 +238,6 @@ app.get("/login.ejs", function (req, res) {
   secondHiddenLi = "";
   phone = "-";
 
-  // poster_url = "";
-  // title = "";
-  // age_rating = "";
-  // release_date = "";
-  // ticket_price = "";
-  // description = "";
   res.render("login", { incorrectCredential: "" });
 });
 
@@ -317,7 +309,6 @@ app.get("/signup.ejs", function (req, res) {
 app.post("/signup", function (req, res) {
   User.findOne({ email: req.body.email })
     .then(function (userFound) {
-      // console.log(userFound);
       if (userFound) {
         res.render("signup", { emailWarn: "Email has been registered" });
       } else {
@@ -499,7 +490,6 @@ app.post("/buyTicket.ejs", function (req, res) {
       dateEmpty = "";
       locationEmpty = "";
       modalsSeatError = "display: none;"
-      // console.log("Masuk buyTicket Post");
       res.redirect("/seatPlan.ejs");
     }
   }
@@ -741,7 +731,6 @@ app.post("/seatPlan.ejs", function (req, res) {
       modalsSeatError = "display: none;";
       res.redirect("/checkout.ejs")
     }
-    // console.log(seatSelected);
     modalsSeatError = "display: none;"
     res.redirect("/seatPlan.ejs");
   }
@@ -793,9 +782,6 @@ app.post("/checkout.ejs", function (req, res) {
       res.redirect("/checkout.ejs");
     }
     else {
-
-      // Urusan dengan Database
-      // put Code Here.....
       const newBookingHistory = new BookingHistory({
         username: username,
         email: email,
@@ -825,8 +811,6 @@ app.post("/checkout.ejs", function (req, res) {
       var theCinema = null;
 
       Cinema.findOne(query).then(function (cinema) {
-        // console.log("Find the Cinema");
-        // console.log("cinema: ", cinema);
         if (cinema) {
           theCinema = cinema;
           cinemaFound = true;
@@ -970,7 +954,6 @@ app.post("/profile.ejs", function (req, res) {
       }
     }).catch((err) => console.log(err));
     modalsTopUp = "display: none;";
-    // alert('Balance updated')
     res.redirect("/profile.ejs");
   }
   else if (button === "withdraw") {
@@ -1028,7 +1011,6 @@ function numberToCurrency(number) {
 async function getCinemaData(title, date, location, showtime) {
   try {
     const cinema = await Cinema.findOne({ movie_title: title, date: date, location: location, showtime: showtime });
-    // console.log("INSIDE getCinemaData , seatUsed: ", cinema.seatUsed);
     return cinema;
   }
   catch (err) {
