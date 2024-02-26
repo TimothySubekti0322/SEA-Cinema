@@ -26,6 +26,7 @@ then to run the website locally , you need to run this command below
 ```
 
 in case nodemon isn't installed yet , you can download the nodemon by run this command
+
 ```bash
   npm i -g nodemon
 ```
